@@ -7,4 +7,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     boolean existsByIsbn(String isbn);
     
+    Book getById(Long id);
+
+    // void delete(Book book);
+
+    // Book update(Book book);
 }
