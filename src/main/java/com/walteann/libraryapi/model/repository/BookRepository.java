@@ -1,5 +1,7 @@
 package com.walteann.libraryapi.model.repository;
 
+import java.util.Optional;
+
 import com.walteann.libraryapi.model.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,7 +11,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     
     Book getById(Long id);
 
-    // void delete(Book book);
+    Optional<Book> findByIsbn(String isbn);
 
-    // Book update(Book book);
 }

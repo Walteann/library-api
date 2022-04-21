@@ -22,7 +22,6 @@ import com.walteann.libraryapi.model.entity.Book;
 @DataJpaTest
 public class BookRepositoryTest {
     
-
     @Autowired
     TestEntityManager entityManager;
 
@@ -45,7 +44,7 @@ public class BookRepositoryTest {
         assertThat(exists).isTrue();
     }
 
-    private Book createNewBook(String isbn) {
+    public static Book createNewBook(String isbn) {
         return Book.builder().title("Aventuras").author("Fulano").isbn(isbn).build();
     }
 
