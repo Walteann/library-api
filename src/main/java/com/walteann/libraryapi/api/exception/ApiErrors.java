@@ -2,6 +2,7 @@ package com.walteann.libraryapi.api.exception;
 
 import com.walteann.libraryapi.exception.BussinessException;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,8 +20,10 @@ public class ApiErrors {
 
     public ApiErrors(BussinessException ex) {
         this.errors = Arrays.asList(ex.getMessage());
-//        this.errors = new ArrayList<>();
-//        this.errors.add(ex.getMessage());
+    }
+
+    public ApiErrors(ResponseStatusException ex) {
+        this.errors = Arrays.asList(ex.getReason());
     }
 
     public List<String> getErrors() {
