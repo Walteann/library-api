@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.walteann.libraryapi.api.dto.LoanFilterDTO;
 import com.walteann.libraryapi.exception.BussinessException;
+import com.walteann.libraryapi.model.entity.Book;
 import com.walteann.libraryapi.model.entity.Loan;
 import com.walteann.libraryapi.model.repository.LoanRepository;
 import com.walteann.libraryapi.service.LoanService;
@@ -43,6 +44,11 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public Page<Loan> find(LoanFilterDTO filterDTO, Pageable pageable) {
         return repository.findByBookIsbnOrCustomer(filterDTO.getIsbn(), filterDTO.getCutomer(), pageable);
+    }
+
+    @Override
+    public Page<Loan> getLoansByBook(Book book, Pageable pageable) {
+        return repository.findByBook(book, pageable);
     }
 
 }

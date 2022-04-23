@@ -3,6 +3,7 @@ package com.walteann.libraryapi.service;
 import java.util.Optional;
 
 import com.walteann.libraryapi.api.dto.LoanFilterDTO;
+import com.walteann.libraryapi.model.entity.Book;
 import com.walteann.libraryapi.model.entity.Loan;
 
 import org.springframework.data.domain.Page;
@@ -16,4 +17,6 @@ public interface LoanService {
     Loan update(Loan loan);
 
     Page<Loan> find(LoanFilterDTO any, Pageable any2);
+
+    Page<Loan> getLoansByBook(Book book, Pageable pageable);
 }
