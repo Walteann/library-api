@@ -18,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static com.walteann.libraryapi.model.repository.BookRepositoryTest.createNewBook;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -36,7 +37,7 @@ public class LoanRepositoryTest {
 
         // Cenario
 
-        Loan loan = createAndPersistLoan();
+        Loan loan = createAndPersistLoan(LocalDate.now());
 
         Book book = loan.getBook();
 
@@ -51,7 +52,7 @@ public class LoanRepositoryTest {
     @DisplayName("Deve buscar emprestimo pelo isbn do livro ou customer")
     void findByBookIsbnOrCustomerTest() {
 
-        Loan loan = createAndPersistLoan();
+        Loan loan = createAndPersistLoan(LocalDate.now());
 
         Page<Loan> result = repository.findByBookIsbnOrCustomer("123", "Fulano", PageRequest.of(0, 10));
 
@@ -62,14 +63,34 @@ public class LoanRepositoryTest {
         Assertions.assertThat(result.getTotalElements()).isEqualTo(1);
     }
 
-    public Loan createAndPersistLoan() {
+    @Test
+    @DisplayName("Deve obter emprestimos cuja a data emprestimo for menor ou igual a 3 dias atras e nao retornados")
+    void findByLoanDateLessThanAndNotReturnedTest() {
+        Loan loan = createAndPersistLoan(LocalDate.now().minusDays(5));
+
+        List<Loan> result = repository.findByLoanDateLessThanAndNotReturned(LocalDate.now().minusDays(4));
+        
+        Assertions.assertThat(result).hasSize(1).contains(loan);
+    }
+
+    @Test
+    @DisplayName("Deve retornar vazio quando não houver emprestimos atrasados.")
+    void notFindByLoanDateLessThanAndNotReturnedTest() {
+        createAndPersistLoan(LocalDate.now());
+
+        List<Loan> result = repository.findByLoanDateLessThanAndNotReturned(LocalDate.now().minusDays(4));
+        
+        Assertions.assertThat(result).isEmpty();
+    }
+
+    public Loan createAndPersistLoan(LocalDate loanDate) {
         Book book = createNewBook("123");
         entityManager.persist(book);
 
         Loan loan = Loan.builder()
                 .book(book)
                 .customer("Fulano")
-                .loanDate(LocalDate.now())
+                .loanDate(loanDate)
                 .build();
 
         entityManager.persist(loan);

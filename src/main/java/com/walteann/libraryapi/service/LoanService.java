@@ -1,5 +1,6 @@
 package com.walteann.libraryapi.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.walteann.libraryapi.api.dto.LoanFilterDTO;
@@ -19,4 +20,6 @@ public interface LoanService {
     Page<Loan> find(LoanFilterDTO any, Pageable any2);
 
     Page<Loan> getLoansByBook(Book book, Pageable pageable);
+
+    List<Loan> getAllLateLoans();
 }
