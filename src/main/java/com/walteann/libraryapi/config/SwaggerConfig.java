@@ -1,41 +1,39 @@
 package com.walteann.libraryapi.config;
 
+import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-@EnableSwagger2
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
 @Configuration
 public class SwaggerConfig {
 
     @Bean
-    public Docket docket() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                            .select()
-                            .apis(RequestHandlerSelectors.basePackage("com.walteann.libraryapi.api.resource"))
-                            .paths(PathSelectors.any())
-                            .build()
-                            .apiInfo(apiInfo());
-    }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("Library API")
-                .description("API Projeto de controle de aluguel de livros")
-                .version("1.0")
-                .contact(contact())
+    public GroupedOpenApi publicApi() {
+        return GroupedOpenApi.builder()
+                .group("spring-api-library-public")
+                .packagesToScan("com.walteann.libraryapi.api.resource")
+                // .pathsToMatch("com.walteann.libraryapi.api.resource")
                 .build();
     }
 
-    private Contact contact() {
-        return new Contact("Walteann Costa", "https://github.com/Walteann", "walteann3@gmail.com");
+    @Bean
+    public OpenAPI springShopOpenAPI() {
+        return new OpenAPI()
+                .info(new Info().title("Library API")
+                        .description("API Projeto de controle de aluguel de livros")
+                        .version("v0.0.1")
+                        .contact(contact()));
     }
+
+    private Contact contact() {
+        Contact teste = new Contact();
+        teste.setEmail("walteann3@gmail.com");
+        teste.setName("Walteann Costa");
+        teste.setUrl("https://github.com/Walteann");
+        return teste;
+    }
+
 }
